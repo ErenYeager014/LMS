@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { AsyncWarpper } from "../Helper/AsyncWrapper";
 import { customValidator } from "../validator/customvalidator";
-import { assessmentvalidator } from "../validator/Assessment.validator";
+import {
+  assessmentvalidator,
+  completedValidator,
+} from "../validator/Assessment.validator";
 import { CustomError } from "../Error/Error";
 import { Assessment } from "../models/Assessment.model";
 
@@ -43,9 +46,7 @@ export const getAssessMent = async (
     if (!req.params.id) {
       throw new CustomError(400, " course Id is not found");
     }
-    const data = await Assessment.findOne({
-      courseId: req.params.id,
-    });
+    const data = await Assessment.findById(req.params.id);
     if (!data) {
       console.log(data);
       throw new CustomError(404, "You're data is not found");
@@ -55,4 +56,27 @@ export const getAssessMent = async (
     });
   };
   await AsyncWarpper({ cb, next });
+};
+
+export const postScore = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.params.id) {
+    throw new CustomError(400, " course Id is not found");
+  }
+  if (!customValidator(completedValidator, req.body, next)) {
+    throw new CustomError(400, "Enter the correct Fields");
+  }
+  const data = await Assessment.findById(req.params.id);
+  if (!data) {
+    throw new CustomError(404, "You're data is not found");
+  }
+  data.completed.push({
+    ...req.body,
+    isCompleted: true,
+  });
+  await data.save();
+  return res.status(200).json("updated assessment");
 };

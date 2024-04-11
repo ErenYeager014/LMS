@@ -29,9 +29,8 @@ export const createCourse = async (
           contentType: "image/png",
         },
       });
-      await Course.save();
-      req.courseId = Course._id;
-      next();
+      const result = await Course.save();
+      return res.status(200).json({ data: result });
     } else {
       throw new CustomError(400, "Enter the file");
     }
@@ -47,7 +46,9 @@ export const getAllcourse = async (
 ) => {
   const cb = async () => {
     const data = await course.find().populate("instructor", "username");
-    return res.status(200).json(data);
+    if (data) {
+      return res.status(200).json(data);
+    }
   };
   await AsyncWarpper({ cb, next });
 };
@@ -62,7 +63,12 @@ export const getCourse = async (
     const id = req.params.id;
     // console.log("called");
     if (id) {
-      const data = await course.findById(id);
+      const data = await course
+        .findById(id)
+        .populate(
+          "assessment",
+          "title description expireDate duration completed"
+        );
       if (!data) {
         throw new CustomError(404, "Not found the course");
       }
@@ -143,11 +149,46 @@ export const enrollCourse = async (
         throw new CustomError(400, "Your are already student");
       }
       Course.students.push(objectId);
-      await Course.save();
-      return res.send(201).json("student has been added");
+      const result = await Course.save();
+      if (result) {
+        req.courseId = result._id;
+        next();
+      }
     } else {
       throw new CustomError(401, "Your are unauthorized");
     }
+  };
+  await AsyncWarpper({ cb, next });
+};
+
+export const mycourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const cb = async () => {
+    if (!req.auth?.role) {
+      throw new CustomError(401, "Unauthorized");
+    }
+    let courses: any = null;
+    if (req.auth.role === "student") {
+      courses = await course
+        .find({
+          students: req.auth?.id,
+        })
+        .populate("instructor", "username");
+      // courses = res.filter((course) =>
+      //   course.students.includes(new mongoose.Types.ObjectId(req.auth?.id))
+      // );
+      // console.log(courses);
+    } else {
+      courses = await course.find({
+        instructor: req.auth?.id,
+      });
+    }
+    return res.status(200).json({
+      data: courses,
+    });
   };
   await AsyncWarpper({ cb, next });
 };

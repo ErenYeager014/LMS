@@ -4,7 +4,10 @@ interface props {
   author: string;
   description: string;
   count?: number | string;
+  tags: string[];
+  id?: string;
 }
+import { Link } from "react-router-dom";
 import svg from "../../assets/react.svg";
 import { Button } from "../../../@/components/ui/button";
 import {
@@ -12,7 +15,14 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "../../../@/components/ui/avatar";
-const CourseCard: React.FC<props> = ({ img, title, author, description }) => {
+const CourseCard: React.FC<props> = ({
+  img,
+  title,
+  author,
+  description,
+  id,
+  tags,
+}) => {
   return (
     <div className="max-w-[350px] flex flex-col justify-between  min-h-[400px] *:py-2 p-4 rounded-lg shadow-md shadow-gray-300 border-[1px] border-gray-200">
       <div>
@@ -41,16 +51,23 @@ const CourseCard: React.FC<props> = ({ img, title, author, description }) => {
         </p>
       </div>
       <div className="flex flex-row gap-2 flex-wrap">
-        <h6 className="border-2 max-w-[100px] px-[10px] py-[2px] cursor-pointer uppercase hover:bg-white hover:text-black  border-black rounded-sm font-semibold bg-black text-white">
-          science
-        </h6>
+        {tags.map((item) => (
+          <h6
+            key={item}
+            className="border-2 max-w-[100px] px-[10px] py-[2px] text-[13px] cursor-pointer uppercase hover:bg-white hover:text-black  border-black rounded-sm font-semibold bg-black text-white"
+          >
+            {item}
+          </h6>
+        ))}
       </div>
-      <Button
-        variant="default"
-        className="w-full rounded-3xl text-[18px] my-2 justify-self-end font-semibold"
-      >
-        Go to Course
-      </Button>
+      <Link to={`/dashboard/course/${id}`}>
+        <Button
+          variant="default"
+          className="w-full rounded-3xl text-[18px] my-2 justify-self-end font-semibold"
+        >
+          Go to Course
+        </Button>
+      </Link>
     </div>
   );
 };

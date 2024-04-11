@@ -17,6 +17,7 @@ export const BlogChecker = async (
       throw new CustomError(400, "Enter the valid id");
     }
     const blog = await Blog.findById(req.params.id);
+    console.log(blog, "check blog")
     if (!blog) {
       throw new CustomError(404, "Blog not found");
     }
@@ -24,7 +25,6 @@ export const BlogChecker = async (
       throw new CustomError(401, "You are unAuthorized");
     }
     if (String(blog.user) === req.auth?.id) {
-      console.log("inside");
       next();
     } else {
       throw new CustomError(403, "You not allowed to manipulate the blog");

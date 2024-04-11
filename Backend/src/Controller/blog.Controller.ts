@@ -34,7 +34,7 @@ export const getAllblogs = async (
   next: NextFunction
 ) => {
   const cb = async () => {
-    const result = await Blog.find();
+    const result = await Blog.find().populate("user", "_id username");
     return res.status(200).json({
       data: result,
     });
@@ -82,7 +82,9 @@ export async function deleteBlog(
       throw new CustomError(401, "Unauthorized");
     }
     const result = await Blog.findByIdAndDelete(req.params.id);
-    return res.status(200).json({ data: result });
+    if (result) {
+      return res.status(200).json({ data: result });
+    }
   };
   await AsyncWarpper({ cb, next });
 }

@@ -41,7 +41,7 @@ export const getReply = async (
     }
     const data = await replyModel.find({
       blogID: req.params.id,
-    });
+    }).populate("userId", "username");
     if (!data) {
       throw new CustomError(404, "data not found");
     }

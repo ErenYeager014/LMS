@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { data } from "../utils/cardsData";
 import { Axios } from "../Axios/Axios";
 
 const useFetch = (url: string) => {
@@ -7,11 +6,11 @@ const useFetch = (url: string) => {
     iserror: boolean;
     isloading: boolean;
     data:
-      | any[]
-      | {
-          data: any;
-        }
-      | any;
+    | any[]
+    | {
+      data: any;
+    }
+    | any;
   }>({
     data: null,
     iserror: false,
@@ -46,3 +45,4 @@ const useFetch = (url: string) => {
 };
 
 export default useFetch;
+

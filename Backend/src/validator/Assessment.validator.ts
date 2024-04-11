@@ -16,3 +16,11 @@ export const assessmentvalidator = (data: any) => {
   });
   return Schema.safeParse(data).success;
 };
+
+export const completedValidator = (data: any) => {
+  const schema = zod.object({
+    id: zod.string(),
+    score: zod.number(),
+  });
+  return schema.safeParse(data).success;
+};

@@ -7,6 +7,7 @@ export const Forbidden = (req: Request, res: Response, next: NextFunction) => {
       throw new CustomError(401, "You are Not Authorized");
     }
     if (req.auth.role === "student") {
+      console.log(req.auth?.role);
       throw new CustomError(403, "You are unauthorized to this page");
     }
     next();

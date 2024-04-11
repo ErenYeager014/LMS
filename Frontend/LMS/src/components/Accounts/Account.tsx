@@ -5,7 +5,9 @@ import {
   CardTitle,
 } from "/@/components/ui/card";
 import { Button } from "/@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { initialstate } from "../../Global/Slice";
 
 type props = {
   children: React.ReactNode;
@@ -14,12 +16,16 @@ type props = {
   postFn?: () => void;
 };
 const Account: React.FC<props> = ({ children, title, text, postFn }) => {
+  const state: initialstate = useSelector((state: initialstate) => state);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (postFn) {
       postFn();
     }
   };
+  if (state.isAuthenticated) {
+    return <Navigate to={"/dashboard"} />;
+  }
   return (
     <div className="flex justify-center items-center h-screen">
       <Card className="w-[350px] bg-transparent rounded-lg min-h-[370px] shadow-lg shadow-gray-400">

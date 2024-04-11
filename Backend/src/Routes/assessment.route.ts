@@ -5,6 +5,7 @@ import { CourseChecker } from "../MiddleWare/Course-checker/Course.middleware";
 import {
   AssessmentPost,
   getAssessMent,
+  postScore,
 } from "../Controller/assessment.controller";
 import { Addcourse } from "../MiddleWare/AddCourse";
 
@@ -13,6 +14,6 @@ const router = express.Router();
 router
   .route("/assessment/:id")
   .post(authorization, Forbidden, CourseChecker, AssessmentPost, Addcourse)
-  .get(authorization, getAssessMent);
-
+  .get(authorization, getAssessMent)
+  .put(authorization, postScore);
 export { router };

@@ -3,6 +3,7 @@ import {
   GraduationCapIcon,
   Home,
   PersonStandingIcon,
+  PoundSterlingIcon,
   User2Icon,
 } from "lucide-react";
 
@@ -53,6 +54,12 @@ export const routes = {
       route: "/mycourse",
       icon: Book,
     },
+    {
+      id: 4,
+      name: "Blog",
+      route: "/blog",
+      icon: PoundSterlingIcon,
+    },
   ],
   admin: [
     {
@@ -78,6 +85,12 @@ export const routes = {
       name: "user",
       route: "/user",
       icon: GraduationCapIcon,
+    },
+    {
+      id: 5,
+      name: "Blog",
+      route: "/blog",
+      icon: PoundSterlingIcon,
     },
   ],
 };

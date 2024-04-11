@@ -1,4 +1,10 @@
-import { getAllLesson, postLesson } from "../Controller/lesson.controller";
+import {
+  deleteLesson,
+  getAllLesson,
+  getLesson,
+  postLesson,
+  updateLesson,
+} from "../Controller/lesson.controller";
 import express from "express";
 import { authorization } from "../MiddleWare/Authorization";
 import { CourseChecker } from "../MiddleWare/Course-checker/Course.middleware";
@@ -20,5 +26,9 @@ router
   )
   .get(authorization, getAllLesson);
 
-router.route("/lesson/:lessonid").put(authorization);
+router
+  .route("/lessons/:id")
+  .put(authorization, Forbidden, upload.single("file"), updateLesson)
+  .get(authorization, getLesson)
+  .delete(authorization, Forbidden, deleteLesson);
 export { router };

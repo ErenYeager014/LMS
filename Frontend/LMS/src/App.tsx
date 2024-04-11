@@ -1,20 +1,12 @@
 import Routers from "./Routes/Route";
 import "../app/globals.css";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { autologin } from "./Global/AsyncThunk";
+import Toasts from "./Provider/Toaster";
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(autologin());
-  }, [dispatch]);
   return (
     <>
-      <Routers />
-
-      {/* <SignIn /> */}
-      {/* <SignUp /> */}
+      <Toasts>
+        <Routers />
+      </Toasts>
     </>
   );
 }

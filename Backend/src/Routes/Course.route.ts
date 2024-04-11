@@ -6,6 +6,7 @@ import {
   updateCourse,
   deleteCourse,
   enrollCourse,
+  mycourse,
 } from "../Controller/Course.controller";
 import { upload } from "../Helper/Files";
 import express from "express";
@@ -17,13 +18,7 @@ const router = express.Router();
 
 router
   .route("/course")
-  .post(
-    authorization,
-    Forbidden,
-    upload.single("thumbnail"),
-    createCourse,
-    courseAdd
-  )
+  .post(authorization, Forbidden, upload.single("thumbnail"), createCourse)
   .get(getAllcourse);
 
 router
@@ -37,5 +32,6 @@ router
     updateCourse
   )
   .delete(authorization, Forbidden, CourseChecker, deleteCourse);
-router.route("/course/enroll").post(authorization, enrollCourse);
+router.route("/course/enroll").post(authorization, enrollCourse, courseAdd);
+router.route("/mycourse").get(authorization, mycourse);
 export { router };

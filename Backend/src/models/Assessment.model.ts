@@ -1,4 +1,5 @@
 import mongoose, { model, Schema } from "mongoose";
+import { boolean } from "zod";
 
 const assessmentSchema = new Schema({
   title: {
@@ -31,10 +32,20 @@ const assessmentSchema = new Schema({
     },
   ],
   by: { type: Schema.Types.ObjectId, ref: "user", required: true },
-  completed: [{ type: Schema.Types.ObjectId, ref: "user" }],
+  completed: [
+    {
+      id: { type: Schema.Types.ObjectId, ref: "user" },
+      score: { type: Number, default: 0 },
+      isCompleted: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "course", // Reference to the Course model
+    required: true,
   },
 });
 
